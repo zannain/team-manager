@@ -6,7 +6,20 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { DataFunctionArgs, json } from "@remix-run/node";
+import { authSessionStorage } from "./utils/session.server";
 
+
+
+export async function loader({ request }: DataFunctionArgs) {
+  const userCookieSession = await authSessionStorage.getSession(request.headers.get('cookie'));
+  const user = userCookieSession.get('user');
+
+  return json(
+		{
+      user
+    })
+}
 export default function App() {
   return (
     <html lang="en">
